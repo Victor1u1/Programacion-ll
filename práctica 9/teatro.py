@@ -2,45 +2,51 @@ import tkinter as tk
 from PIL import Image, ImageTk
 
 class Boleto:
-    def __init__(self, numero):
-        self.numero = numero
+    def __init__(self, cantidad):
+        self.cantidad = cantidad
         self.precio = 0.0
 
     def mostrar(self):
-        return f"Número: {self.numero}, Precio: {self.precio:.1f}"
+        return f"Cantidad: {self.cantidad}, Precio Total: {self.precio:.1f}"
 
 class Palco(Boleto):
-    def __init__(self, numero):
-        super().__init__(numero)
-        self.precio = 100.0
+    def __init__(self, cantidad):
+        super().__init__(cantidad)
+        self.precio = 100.0 * cantidad
 
 class Platea(Boleto):
-    def __init__(self, numero, dias):
-        super().__init__(numero)
-        self.precio = 50.0 if dias >= 10 else 60.0
+    def __init__(self, cantidad, dias):
+        super().__init__(cantidad)
+        precio_unitario = 50.0 if dias >= 10 else 60.0
+        self.precio = precio_unitario * cantidad
 
 class Galeria(Boleto):
-    def __init__(self, numero, dias):
-        super().__init__(numero)
-        self.precio = 25.0 if dias >= 10 else 30.0
+    def __init__(self, cantidad, dias):
+        super().__init__(cantidad)
+        precio_unitario = 25.0 if dias >= 10 else 30.0
+        self.precio = precio_unitario * cantidad
 
 def vender():
     tipo_boleto = tipo.get()
     try:
-        numero = int(entry_numero.get())
+        cantidad = int(entry_cantidad.get())
         dias = int(entry_dias.get()) if tipo_boleto != "Palco" else 0
 
+        if cantidad <= 0:
+            resultado.config(text="La cantidad debe ser mayor que 0.")
+            return
+
         if tipo_boleto == "Palco":
-            boleto = Palco(numero)
+            boleto = Palco(cantidad)
         elif tipo_boleto == "Platea":
-            boleto = Platea(numero, dias)
+            boleto = Platea(cantidad, dias)
         elif tipo_boleto == "Galeria":
-            boleto = Galeria(numero, dias)
+            boleto = Galeria(cantidad, dias)
         else:
             resultado.config(text="Seleccione un tipo de boleto.")
             return
 
-        resultado.config(text=f"Número: {boleto.numero}, Precio: {boleto.precio:.1f}")
+        resultado.config(text=f"Tipo: {tipo_boleto}\nCantidad: {boleto.cantidad}\nPrecio Total: {boleto.precio:.1f}")
     except ValueError:
         resultado.config(text="Datos inválidos. Ingrese números válidos.")
 
@@ -67,14 +73,14 @@ except:
 frame_datos = tk.LabelFrame(ventana, text="Datos del Boleto", padx=10, pady=10)
 frame_datos.pack(padx=10, pady=5, fill="x")
 
-tipo = tk.StringVar()
+tipo = tk.StringVar(value="Ninguno")
 tk.Radiobutton(frame_datos, text="Palco", variable=tipo, value="Palco").grid(row=0, column=0, sticky='w')
 tk.Radiobutton(frame_datos, text="Platea", variable=tipo, value="Platea").grid(row=0, column=1, sticky='w')
 tk.Radiobutton(frame_datos, text="Galeria", variable=tipo, value="Galeria").grid(row=0, column=2, sticky='w')
 
-tk.Label(frame_datos, text="Número:").grid(row=1, column=0, pady=5, sticky='e')
-entry_numero = tk.Entry(frame_datos, width=10)
-entry_numero.grid(row=1, column=1, pady=5, sticky='w')
+tk.Label(frame_datos, text="Cantidad de Boletos:").grid(row=1, column=0, pady=5, sticky='e')
+entry_cantidad = tk.Entry(frame_datos, width=10)
+entry_cantidad.grid(row=1, column=1, pady=5, sticky='w')
 
 tk.Label(frame_datos, text="Cant. Días para el Evento:").grid(row=2, column=0, columnspan=2, pady=5, sticky='e')
 entry_dias = tk.Entry(frame_datos, width=10)
@@ -92,4 +98,3 @@ resultado = tk.Label(frame_info, text="", font=("Arial", 12), fg="blue")
 resultado.pack()
 
 ventana.mainloop()
-5
