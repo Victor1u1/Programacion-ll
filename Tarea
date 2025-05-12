@@ -44,6 +44,36 @@ class Universidad:
     def agregar_estudiante(self, estudiante):
         self.estudiantes.append(estudiante)
 
+    def agregar_datos(self):
+        # Docentes
+        d1 = Docente("101", "Juan", "Perez", 40, 5000, 10)
+        d2 = Docente("102", "Ana", "Lopez", 38, 4800, 8)
+        d3 = Docente("103", "Carlos", "Gomez", 45, 5200, 12)
+        d4 = Docente("104", "Laura", "Diaz", 37, 4900, 9)
+
+        # Estudiante 1
+        e1 = Estudiante("201", "Luis", "Mamani", 20, "RU01")
+        e1.agregar_materia(Materia("INF101", "Programación", 70, 80, d1))
+        e1.agregar_materia(Materia("MAT101", "Álgebra", 60, 50, d2))
+        e1.agregar_materia(Materia("FIS101", "Física", 55, 45, d3))
+
+        # Estudiante 2
+        e2 = Estudiante("202", "Maria", "Quispe", 21, "RU02")
+        e2.agregar_materia(Materia("INF101", "Programación", 90, 95, d1))
+        e2.agregar_materia(Materia("QUI101", "Química", 40, 35, d4))
+        e2.agregar_materia(Materia("MAT101", "Álgebra", 70, 60, d2))
+
+        # Estudiante 3
+        e3 = Estudiante("203", "Jorge", "Cruz", 22, "RU03")
+        e3.agregar_materia(Materia("BIO101", "Biología", 50, 55, d4))
+        e3.agregar_materia(Materia("INF102", "Estructuras", 80, 85, d1))
+        e3.agregar_materia(Materia("FIS101", "Física", 45, 50, d3))
+
+        # Agregar a la universidad
+        self.agregar_estudiante(e1)
+        self.agregar_estudiante(e2)
+        self.agregar_estudiante(e3)
+
     def mostrar_aprobados_docente(self, nombre_docente):
         print(f"\nEstudiantes que aprueban materias con el docente {nombre_docente}:")
         for est in self.estudiantes:
@@ -58,28 +88,11 @@ class Universidad:
         print(f"\nEstudiantes con mayor promedio ({max_prom}):")
         for e in self.estudiantes:
             if e.promedio_general() == max_prom:
-                print(f"{e.nom} {e.ape} - Promedio: {max_prom}")
+                print(f"{e.nom} {e.ape} - Promedio: {max_prom}"
 
 if __name__ == "__main__":
     uni = Universidad("UMSA")
+    uni.agregar_datos()
 
-    d1 = Docente("123", "Juan", "Perez", 40, 5000, 10)
-    d2 = Docente("456", "Ana", "Lopez", 35, 4800, 8)
-
-    e1 = Estudiante("001", "Luis", "Mamani", 20, "RU01")
-    e1.agregar_materia(Materia("INF101", "Programación", 70, 80, d1))
-    e1.agregar_materia(Materia("MAT101", "Álgebra", 50, 45, d2))
-
-    e2 = Estudiante("002", "Maria", "Quispe", 21, "RU02")
-    e2.agregar_materia(Materia("INF101", "Programación", 90, 95, d1))
-    e2.agregar_materia(Materia("MAT101", "Álgebra", 40, 30, d2))
-
-    # Agrega
-    uni.agregar_estudiante(e1)
-    uni.agregar_estudiante(e2)
-
-    # b) Mostrar aprobados con un docente
     uni.mostrar_aprobados_docente("Juan")
-
-    # c) Mostrar estudiante(s) con mayor promedio
     uni.mostrar_mejores_promedios()
