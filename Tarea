@@ -1,0 +1,85 @@
+class Persona:
+    def __init__(self, ci, nom, ape, edad):
+        self.ci = ci
+        self.nom = nom
+        self.ape = ape
+        self.edad = edad
+
+class Docente(Persona):
+    def __init__(self, ci, nom, ape, edad, sueldo, antiguedad):
+        super().__init__(ci, nom, ape, edad)
+        self.sueldo = sueldo
+        self.antiguedad = antiguedad
+
+class Materia:
+    def __init__(self, sigla, desc, nota1, nota2, docente):
+        self.sigla = sigla
+        self.desc = desc
+        self.nota1 = nota1
+        self.nota2 = nota2
+        self.docente = docente
+
+    def promedio(self):
+        return (self.nota1 + self.nota2) / 2
+
+class Estudiante(Persona):
+    def __init__(self, ci, nom, ape, edad, ru):
+        super().__init__(ci, nom, ape, edad)
+        self.ru = ru
+        self.materias = []
+
+    def agregar_materia(self, materia):
+        self.materias.append(materia)
+
+    def promedio_general(self):
+        if not self.materias:
+            return 0
+        return sum(m.promedio() for m in self.materias) / len(self.materias)
+
+class Universidad:
+    def __init__(self, nombreU):
+        self.nombreU = nombreU
+        self.estudiantes = []
+
+    def agregar_estudiante(self, estudiante):
+        self.estudiantes.append(estudiante)
+
+    def mostrar_aprobados_docente(self, nombre_docente):
+        print(f"\nEstudiantes que aprueban materias con el docente {nombre_docente}:")
+        for est in self.estudiantes:
+            for mat in est.materias:
+                if mat.docente.nom == nombre_docente and mat.promedio() >= 51:
+                    print(f"{est.nom} {est.ape} - {mat.desc} - Nota: {mat.promedio()}")
+
+    def mostrar_mejores_promedios(self):
+        if not self.estudiantes:
+            return
+        max_prom = max(e.promedio_general() for e in self.estudiantes)
+        print(f"\nEstudiantes con mayor promedio ({max_prom}):")
+        for e in self.estudiantes:
+            if e.promedio_general() == max_prom:
+                print(f"{e.nom} {e.ape} - Promedio: {max_prom}")
+
+if __name__ == "__main__":
+    uni = Universidad("UMSA")
+
+    d1 = Docente("123", "Juan", "Perez", 40, 5000, 10)
+    d2 = Docente("456", "Ana", "Lopez", 35, 4800, 8)
+
+    e1 = Estudiante("001", "Luis", "Mamani", 20, "RU01")
+    e1.agregar_materia(Materia("INF101", "Programación", 70, 80, d1))
+    e1.agregar_materia(Materia("MAT101", "Álgebra", 50, 45, d2))
+
+    e2 = Estudiante("002", "Maria", "Quispe", 21, "RU02")
+    e2.agregar_materia(Materia("INF101", "Programación", 90, 95, d1))
+    e2.agregar_materia(Materia("MAT101", "Álgebra", 40, 30, d2))
+
+    # Agrega
+    uni.agregar_estudiante(e1)
+    uni.agregar_estudiante(e2)
+
+    # b) Mostrar aprobados con un docente
+    uni.mostrar_aprobados_docente("Juan")
+
+    # c) Mostrar estudiante(s) con mayor promedio
+    uni.mostrar_mejores_promedios()
