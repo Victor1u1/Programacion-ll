@@ -1,0 +1,62 @@
+// Clase genérica TipoA con un solo tipo
+class Caja<T> {
+    private T contenido;
+
+    public void guardar(T item) {
+        contenido = item;
+    }
+
+    public T obtener() {
+        return contenido;
+    }
+}
+
+-----------------------------------
+public class PruebaTipoA {
+    public static void main(String[] args) {
+        Caja<String> cajaTexto = new Caja<>();
+        cajaTexto.guardar("Hola mundo");
+        System.out.println("Contenido de cajaTexto: " + cajaTexto.obtener());
+
+        Caja<Integer> cajaNumero = new Caja<>();
+        cajaNumero.guardar(123);
+        System.out.println("Contenido de cajaNumero: " + cajaNumero.obtener());
+    }
+}
+P---------------------
+
+// Clase genérica TipoB con dos tipos genéricos
+class Par<K, V> {
+    private K clave;
+    private V valor;
+
+    public Par(K clave, V valor) {
+        this.clave = clave;
+        this.valor = valor;
+    }
+
+    public K getClave() {
+        return clave;
+    }
+
+    public V getValor() {
+        return valor;
+    }
+
+    // Método genérico independiente del tipo de la clase
+    public static <T> void imprimirElemento(T elemento) {
+        System.out.println("Elemento: " + elemento);
+    }
+}
+
+--------------------
+public class PruebaTipoB {
+    public static void main(String[] args) {
+        Par<String, Integer> par = new Par<>("Edad", 30);
+        System.out.println("Clave: " + par.getClave());
+        System.out.println("Valor: " + par.getValor());
+
+        Par.imprimirElemento("Texto genérico");
+        Par.imprimirElemento(3.14);
+    }
+}
